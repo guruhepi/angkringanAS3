@@ -96,15 +96,22 @@
 
                     // Cek nomor WA di CSV
                     rows.forEach(row => {
+                        const kode = row[0].trim(); // Kode di kolom ke-1
+                        const nama = row[1].trim(); // Nama di kolom ke-2
+                        const link = row[2].trim(); // Link di kolom ke-3
                         const no_wa = row[3].trim(); // Nomor WA di kolom ke-4
 
                         if (noWaInput === no_wa) {
-                            const nama = row[1]; // Nama di kolom ke-2
-                            Swal.fire(
-                                'Sertifikat Valid!',
-                                `Sertifikat ini milik ${nama}`,
-                                'success'
-                            );
+                            Swal.fire({
+                                title: 'Sertifikat Valid!',
+                                html: `
+                                    <p><strong>Kode:</strong> ${kode}</p>
+                                    <p><strong>Nama:</strong> ${nama}</p>
+                                    <a href="${link}" target="_blank" class="swal2-confirm swal2-styled" style="background-color: #00f2fe; color: white; border-radius: 25px; padding: 10px 20px; text-decoration: none;">Unduh Sertifikat</a>
+                                `,
+                                icon: 'success',
+                                showConfirmButton: false
+                            });
                             found = true;
                         }
                     });

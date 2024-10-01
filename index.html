@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cek Sertifikat</title>
+    <title>Cek dan Unduh Sertifikat</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
@@ -25,6 +25,7 @@
             text-align: center;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
         }
 
         h1 {
@@ -69,20 +70,105 @@
             background-color: #4facfe;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
+
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .menu button {
+            width: 45%;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Cek Sertifikat Anda</h1>
-        <form id="cekForm">
-            <label for="no_wa">Masukkan No WhatsApp:</label>
-            <input type="text" id="no_wa" name="no_wa" placeholder="Contoh: 081234567890" required>
-            <button type="submit">Cek</button>
-        </form>
+        <h1>Menu Sertifikat</h1>
+        <div class="menu">
+            <button id="cekMenuBtn">Cek Sertifikat</button>
+            <button id="unduhMenuBtn">Unduh Sertifikat</button>
+        </div>
+
+        <!-- Form Cek Sertifikat -->
+        <div id="cekFormSection" class="form-section active">
+            <form id="cekForm">
+                <label for="kode">Masukkan Kode Sertifikat:</label>
+                <input type="text" id="kode" name="kode" placeholder="Contoh: 1234" required>
+                <button type="submit">Cek</button>
+            </form>
+        </div>
+
+        <!-- Form Unduh Sertifikat -->
+        <div id="unduhFormSection" class="form-section">
+            <form id="unduhForm">
+                <label for="no_wa">Masukkan No WhatsApp:</label>
+                <input type="text" id="no_wa" name="no_wa" placeholder="Contoh: 081234567890" required>
+                <button type="submit">Unduh</button>
+            </form>
+        </div>
     </div>
 
     <script>
+        // Menu Button Handlers
+        document.getElementById('cekMenuBtn').addEventListener('click', function() {
+            document.getElementById('cekFormSection').classList.add('active');
+            document.getElementById('unduhFormSection').classList.remove('active');
+        });
+
+        document.getElementById('unduhMenuBtn').addEventListener('click', function() {
+            document.getElementById('cekFormSection').classList.remove('active');
+            document.getElementById('unduhFormSection').classList.add('active');
+        });
+
+        // Cek Sertifikat (berdasarkan Kode)
         document.getElementById('cekForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const kodeInput = document.getElementById('kode').value.trim();
+
+            // Fetch data CSV
+            fetch('data.csv')
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split('\n').map(row => row.split(','));
+                    let found = false;
+
+                    // Cek kode di CSV
+                    rows.forEach(row => {
+                        const kode = row[0].trim(); // Kode di kolom ke-1
+                        const nama = row[1].trim(); // Nama di kolom ke-2
+
+                        if (kodeInput === kode) {
+                            Swal.fire(
+                                'Sertifikat Valid!',
+                                `Sertifikat dengan kode <strong>${kode}</strong> adalah milik <strong>${nama}</strong>.`,
+                                'success'
+                            );
+                            found = true;
+                        }
+                    });
+
+                    if (!found) {
+                        Swal.fire(
+                            'Tidak Ditemukan',
+                            'Kode sertifikat tidak ditemukan!',
+                            'error'
+                        );
+                    }
+                });
+        });
+
+        // Unduh Sertifikat (berdasarkan No WhatsApp)
+        document.getElementById('unduhForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const noWaInput = document.getElementById('no_wa').value.trim();

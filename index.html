@@ -134,26 +134,29 @@
             e.preventDefault();
 
             const kodeInput = document.getElementById('kode').value.trim();
+            let found = false;
 
             // Fetch data CSV
             fetch('data.csv')
                 .then(response => response.text())
                 .then(data => {
                     const rows = data.split('\n').map(row => row.split(','));
-                    let found = false;
 
                     // Cek kode di CSV
                     rows.forEach(row => {
-                        const kode = row[0].trim(); // Kode di kolom ke-1
-                        const nama = row[1].trim(); // Nama di kolom ke-2
+                        // Pastikan baris memiliki cukup kolom
+                        if (row.length >= 2) {
+                            const kode = row[0].trim(); // Kode di kolom ke-1
+                            const nama = row[1].trim(); // Nama di kolom ke-2
 
-                        if (kodeInput === kode) {
-                            Swal.fire(
-                                'Sertifikat Valid!',
-                                `Sertifikat dengan kode <strong>${kode}</strong> adalah milik <strong>${nama}</strong>.`,
-                                'success'
-                            );
-                            found = true;
+                            if (kodeInput === kode) {
+                                Swal.fire(
+                                    'Sertifikat Valid!',
+                                    `Sertifikat dengan kode <strong>${kode}</strong> adalah milik <strong>${nama}</strong>.`,
+                                    'success'
+                                );
+                                found = true;
+                            }
                         }
                     });
 
@@ -172,33 +175,36 @@
             e.preventDefault();
 
             const noWaInput = document.getElementById('no_wa').value.trim();
+            let found = false;
 
             // Fetch data CSV
             fetch('data.csv')
                 .then(response => response.text())
                 .then(data => {
                     const rows = data.split('\n').map(row => row.split(','));
-                    let found = false;
 
                     // Cek nomor WA di CSV
                     rows.forEach(row => {
-                        const kode = row[0].trim(); // Kode di kolom ke-1
-                        const nama = row[1].trim(); // Nama di kolom ke-2
-                        const link = row[2].trim(); // Link di kolom ke-3
-                        const no_wa = row[3].trim(); // Nomor WA di kolom ke-4
+                        // Pastikan baris memiliki cukup kolom
+                        if (row.length >= 4) {
+                            const kode = row[0].trim(); // Kode di kolom ke-1
+                            const nama = row[1].trim(); // Nama di kolom ke-2
+                            const link = row[2].trim(); // Link di kolom ke-3
+                            const no_wa = row[3].trim(); // Nomor WA di kolom ke-4
 
-                        if (noWaInput === no_wa) {
-                            Swal.fire({
-                                title: 'Sertifikat Valid!',
-                                html: `
-                                    <p><strong>Kode:</strong> ${kode}</p>
-                                    <p><strong>Nama:</strong> ${nama}</p>
-                                    <a href="${link}" target="_blank" class="swal2-confirm swal2-styled" style="background-color: #00f2fe; color: white; border-radius: 25px; padding: 10px 20px; text-decoration: none;">Unduh Sertifikat</a>
-                                `,
-                                icon: 'success',
-                                showConfirmButton: false
-                            });
-                            found = true;
+                            if (noWaInput === no_wa) {
+                                Swal.fire({
+                                    title: 'Sertifikat Valid!',
+                                    html: `
+                                        <p><strong>Kode:</strong> ${kode}</p>
+                                        <p><strong>Nama:</strong> ${nama}</p>
+                                        <a href="${link}" target="_blank" class="swal2-confirm swal2-styled" style="background-color: #00f2fe; color: white; border-radius: 25px; padding: 10px 20px; text-decoration: none;">Unduh Sertifikat</a>
+                                    `,
+                                    icon: 'success',
+                                    showConfirmButton: false
+                                });
+                                found = true;
+                            }
                         }
                     });
 

@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var nama = "<?= nama ?>";
+      var jenisAlert = "<?= jenisAlert ?>";
+      
+      // Memanggil SweetAlert2
+      Swal.fire({
+        title: "Kombel Angkringan Merdeka",
+        text: nama,
+        icon: jenisAlert,
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        showConfirmButton: true,
+        showDenyButton: true,
+        denyButtonText: "Lihat Peserta"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Tindakan saat tombol OK diklik
+          window.open("https://guru.kemdikbud.go.id/komunitas/qo68ayOXDa", "_blank");
+        } else if (result.isDenied) {
+          // Tindakan saat tombol Lihat Peserta diklik
+          window.open("https://docs.google.com/spreadsheets/d/e/2PACX-1vRvbvEyG5jF_oR5GAUL4S11DTq8fgw3GeFHl9goAXHf8hvKHI3k5My436xPgYMD5g4vcY9Ur2hMQ7J8/pubhtml?gid=261899029&single=true", "_blank");
+        }
+        
+        // Memanggil fungsi speakText dengan teks sesuai hasil Swal
+        speakText("Terima kasih, sampai bertemu di webinar selanjutnya");
+      });
+
+      // Fungsi untuk memutar suara menggunakan SpeechSynthesisUtterance
+      function speakText(text) {
+        var speechSynthesis = window.speechSynthesis;
+        var speechText = new SpeechSynthesisUtterance(text);
+        speechText.lang = 'id-ID'; // Mengatur bahasa ke Indonesia
+        speechSynthesis.speak(speechText);
+      }
+    });
+  </script>
+</body>
+</html>
 

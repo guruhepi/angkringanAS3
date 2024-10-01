@@ -5,20 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cek Sertifikat</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        .container {
+            background: #ffffff33;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            background-color: #00f2fe;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #4facfe;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
-    <h1>Cek Sertifikat Anda</h1>
-    <form id="cekForm">
-        <label for="no_wa">Masukkan No WhatsApp:</label>
-        <input type="text" id="no_wa" name="no_wa" required>
-        <button type="submit">Cek</button>
-    </form>
+    <div class="container">
+        <h1>Cek Sertifikat Anda</h1>
+        <form id="cekForm">
+            <label for="no_wa">Masukkan No WhatsApp:</label>
+            <input type="text" id="no_wa" name="no_wa" placeholder="Contoh: 081234567890" required>
+            <button type="submit">Cek</button>
+        </form>
+    </div>
 
     <script>
         document.getElementById('cekForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const noWaInput = document.getElementById('no_wa').value;
+            const noWaInput = document.getElementById('no_wa').value.trim();
 
             // Fetch data CSV
             fetch('data.csv')

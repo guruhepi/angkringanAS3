@@ -1,46 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Sertifikat</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var nama = "<?= nama ?>";
-      var jenisAlert = "<?= jenisAlert ?>";
-      
-      // Memanggil SweetAlert2
-      Swal.fire({
-        title: "Kombel Angkringan Merdeka",
-        text: nama,
-        icon: jenisAlert,
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        showConfirmButton: true,
-        showDenyButton: true,
-        denyButtonText: "Lihat Peserta"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Tindakan saat tombol OK diklik
-          window.open("https://guru.kemdikbud.go.id/komunitas/qo68ayOXDa", "_blank");
-        } else if (result.isDenied) {
-          // Tindakan saat tombol Lihat Peserta diklik
-          window.open("https://docs.google.com/spreadsheets/d/e/2PACX-1vRvbvEyG5jF_oR5GAUL4S11DTq8fgw3GeFHl9goAXHf8hvKHI3k5My436xPgYMD5g4vcY9Ur2hMQ7J8/pubhtml?gid=261899029&single=true", "_blank");
-        }
-        
-        // Memanggil fungsi speakText dengan teks sesuai hasil Swal
-        speakText("Terima kasih, sampai bertemu di webinar selanjutnya");
-      });
+    <h1>Cek Sertifikat Anda</h1>
+    <form id="cekForm">
+        <label for="no_wa">Masukkan No WhatsApp:</label>
+        <input type="text" id="no_wa" name="no_wa" required>
+        <button type="submit">Cek</button>
+    </form>
 
-      // Fungsi untuk memutar suara menggunakan SpeechSynthesisUtterance
-      function speakText(text) {
-        var speechSynthesis = window.speechSynthesis;
-        var speechText = new SpeechSynthesisUtterance(text);
-        speechText.lang = 'id-ID'; // Mengatur bahasa ke Indonesia
-        speechSynthesis.speak(speechText);
-      }
-    });
-  </script>
+    <script>
+        document.getElementById('cekForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const noWaInput = document.getElementById('no_wa').value;
+
+            // Fetch data CSV
+            fetch('data.csv')
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split('\n').map(row => row.split(','));
+                    let found = false;
+
+                    // Cek nomor WA di CSV
+                    rows.forEach(row => {
+                        const no_wa = row[3].trim(); // Nomor WA di kolom ke-4
+
+                        if (noWaInput === no_wa) {
+                            const nama = row[1]; // Nama di kolom ke-2
+                            Swal.fire(
+                                'Sertifikat Valid!',
+                                `Sertifikat ini milik ${nama}`,
+                                'success'
+                            );
+                            found = true;
+                        }
+                    });
+
+                    if (!found) {
+                        Swal.fire(
+                            'Tidak Ditemukan',
+                            'Nomor WhatsApp tidak terdaftar!',
+                            'error'
+                        );
+                    }
+                });
+        });
+    </script>
 </body>
 </html>
-
